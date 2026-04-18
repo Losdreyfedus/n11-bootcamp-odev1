@@ -1,6 +1,6 @@
 # 🚀 Yeni Ödeme Yöntemi Entegrasyonu (SOLID Prensipleri)
 
-Bu proje, bir ödeme sistemine mevcut kod yapısını bozmadan yeni bir ödeme yönteminin (PayPal) nasıl eklenebileceğini göstermektedir. Projede nesne yönelimli programlama (OOP) ve **SOLID** prensipleri (Özellikle SRP, OCP ve DIP) temel alınmıştır. Tasarım deseni olarak **Strategy Pattern** kullanılmıştır.
+Bu proje, bir ödeme sistemine mevcut kod yapısını bozmadan yeni bir ödeme yönteminin nasıl eklenebileceğini göstermektedir. Projede nesne yönelimli programlama (OOP) ve **SOLID** prensipleri (Özellikle SRP, OCP ve DIP) temel alınmıştır. Tasarım deseni olarak **Strategy Pattern** kullanılmıştır.
 
 ## 🛠️ Tasarım Kararları ve SOLID Yaklaşımı
 
