@@ -29,5 +29,69 @@ Sistemdeki if/else veya switch/case bloklarının (Ödeme tipi Kredi Kartı ise 
 * **Context (Bağlam):** `PaymentProcessor` sınıfıdır. İstemci (Client) tarafından kendisine verilen stratejiyi çalıştırır. Ödemenin "nasıl" yapılacağı ile değil, sadece "yapılması" ile ilgilenir.
 
 Bu desen sayesinde, kodun karmaşıklığı azaltılmış ve yeni ödeme yöntemlerinin (yeni stratejilerin) sisteme tak-çalıştır (plug-and-play) mantığıyla eklenmesi sağlanmıştır.
+
 ## ⚙️ Nasıl Çalıştırılır?
 `Test.java` dosyası üzerinden uygulamanın temel akışını ve polimorfik yapısını test edebilirsiniz.
+
+Program çalıştırıldığında terminal üzerinden etkileşimli olarak:
+
+```
+=== Ödeme Sistemi ===
+
+Lütfen ödeme yöntemi seçiniz:
+1. Kredi Kartı
+2. PayPal
+
+Seçiminiz (1 veya 2): 1
+
+Ödenecek tutar (TL): 500
+
+--- İşlem Gerçekleştiriliyor ---
+500.0TL Kredi kartı yoluyla başarıyla çekildi.
+--- İşlem Tamamlandı ---
+```
+
+## 🔄 Clean Code Optimizasyonları
+
+### PaymentValidator Sınıfı
+Tutar validasyonu SRP'ye uygun olarak ayrı bir sınıfta yönetilmektedir:
+* Validation logic'in yeniden kullanılabilirliği sağlanır
+* Unit test'lenmesi kolaydır
+* Business logic'ten ayrıştırılmıştır
+
+### If Statement Ortadan Kaldırılması
+`Test.java` `main` methodu **0 if statement** içerir:
+* **Seçim:** `Map.getOrDefault()` ile handle edilir
+* **Validasyon:** Exception throw ederek failure case'ler yönetilir
+* **Try-with-resources:** Scanner otomatik kapatılır
+
+### Proje Yapısı
+```
+src/com/n11/oop/solid/
+├── Test.java                 # UI/Flow yönetimi (0 if/else)
+├── PaymentValidator.java     # Validasyon (Utility/Validator pattern)
+├── PaymentProcessor.java     # Ödeme işlemi yönetimi (Context)
+├── IPaymentMethod.java       # Sözleşme (Strategy interface)
+├── CreditCardPayment.java    # Kredi kartı implementasyonu
+└── PayPalPayment.java       # PayPal implementasyonu
+```
+
+## 🚀 Genişletme (Plug-and-Play)
+
+Yeni ödeme yöntemi eklemek için:
+
+```java
+// 1. Yeni class oluştur
+public class GooglePayPayment implements IPaymentMethod {
+    @Override
+    public boolean pay(double amount) {
+        System.out.println(amount + "TL Google Pay yoluyla başarıyla çekildi.");
+        return true;
+    }
+}
+
+// 2. Test.java'ya 1 satır ekle
+paymentMethods.put(3, new GooglePayPayment());
+```
+
+Bu kadar! Mevcut kodlar hiç değişmez (OCP ✅)
